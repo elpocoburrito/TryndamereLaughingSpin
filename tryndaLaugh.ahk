@@ -2,8 +2,11 @@
 #UseHook
 #SingleInstance, Force
 #NoEnv
-Menu, Tray, NoIcon
+;Menu, Tray, NoIcon
 SavedDataFile := "TryndLaugh.dat"
+
+xE = 0
+yE = 0
 
 IfExist, %SavedDataFile%
     FileReadLine, pixCol, %SavedDataFile%, 1
@@ -11,14 +14,17 @@ return
 
 #IfWinActive ahk_exe League of Legends.exe
 numpad0::
-    PixelGetColor, pixCol, 917, 1013
+    WinGetActiveStats, Title, w, h, x, y
+    xE := ((48/100)*w)
+    yE := ((935/1000)*h)
+    PixelGetColor, pixCol, %xE%, %yE%
     FileDelete, %SavedDataFile%
     FileAppend, %pixCol%, %SavedDataFile%
     msgbox, Your Tryndamere Macro is now ready! If it does not work, make sure you are in borderless
 return
 
 ~e::
-    PixelGetColor, currentCol, 917, 1013
+    PixelGetColor, currentCol, %xE%, %yE%
     if ErrorLevel != 0
         Return
     else if (currentCol == pixCol)
